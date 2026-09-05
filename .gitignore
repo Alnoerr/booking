@@ -5,10 +5,12 @@ dist/
 !.env.example
 *.local
 *.log
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
 .idea/
 .vscode/
 .DS_Store
 __pycache__/
 *.py[cod]
 .venv/
-

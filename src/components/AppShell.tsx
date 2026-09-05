@@ -17,7 +17,7 @@ export function AppShell() {
           <Toolbar disableGutters sx={{ py: 1, flexWrap: 'wrap' }}>
             <Stack component={Link} to="/catalog" direction="row" spacing={1} alignItems="center" sx={{ mr: 'auto' }}>
               <MenuBookIcon />
-              <Typography variant="h6" fontWeight="bold">BookLoop</Typography>
+              <Typography variant="h6" fontWeight="bold">Обмен книгами</Typography>
             </Stack>
             <Stack direction="row" sx={{ overflowX: 'auto' }}>
               {navigation.map((item) => (

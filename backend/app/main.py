@@ -2,10 +2,12 @@ from fastapi import FastAPI
 
 from . import models
 from .database import Base, engine
+from .routes.books import router as books_router
 from .routes.locations import router as locations_router
 
 
 app = FastAPI(title="Обмен книгами")
+app.include_router(books_router)
 app.include_router(locations_router)
 
 

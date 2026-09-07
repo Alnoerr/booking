@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from . import models, schemas
@@ -105,4 +105,17 @@ def delete_reservation(db: Session, reservation: models.Reservation) -> None:
         reservation.book.available = True
     db.delete(reservation)
     db.commit()
+
+
+def get_statistics(db: Session) -> dict[str, int]:
+    books = db.scalar(select(func.count(models.Book.id))) or 0
+    reservations = db.scalar(select(func.count(models.Reservation.id))) or 0
+    active = db.scalar(
+        select(func.count(models.Reservation.id)).where(models.Reservation.status == "active")
+    ) or 0
+    return {
+        "books": books,
+        "reservations": reservations,
+        "active_reservations": active,
+    }
 

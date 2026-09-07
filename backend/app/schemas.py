@@ -63,3 +63,9 @@ class ReservationRead(BaseModel):
     returned_at: date | None
     model_config = ConfigDict(from_attributes=True)
 
+
+class StatisticsRead(BaseModel):
+    books: int
+    reservations: int
+    active_reservations: int
+

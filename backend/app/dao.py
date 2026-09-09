@@ -118,4 +118,3 @@ def get_statistics(db: Session) -> dict[str, int]:
         "reservations": reservations,
         "active_reservations": active,
     }
-

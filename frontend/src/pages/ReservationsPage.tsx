@@ -6,7 +6,7 @@ export function ReservationsPage() {
   const location = locations.find((item) => item.id === book.locationId)
 
   return (
-    <Container component="main" maxWidth="md" sx={{ py: 4 }}>
+    <Container component="main" maxWidth="md" className="page" sx={{ py: 4 }}>
       <Typography variant="h4">Мои бронирования</Typography>
       <Typography color="text.secondary" sx={{ mt: 1, mb: 3 }}>Текущие и завершённые бронирования.</Typography>
       <Card>

@@ -8,7 +8,7 @@ const metrics = [
 
 export function StatisticsPage() {
   return (
-    <Container component="main" maxWidth="md" sx={{ py: 4 }}>
+    <Container component="main" maxWidth="md" className="page" sx={{ py: 4 }}>
       <Typography variant="h4">Статистика</Typography>
       <Typography color="text.secondary" sx={{ mt: 1, mb: 3 }}>Простая статистика сервиса.</Typography>
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' }, gap: 2 }}>

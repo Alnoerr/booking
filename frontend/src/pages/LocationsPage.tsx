@@ -4,7 +4,7 @@ import { locations } from '../entities/book/demoData'
 
 export function LocationsPage() {
   return (
-    <Container component="main" maxWidth="md" sx={{ py: 4 }}>
+    <Container component="main" maxWidth="md" className="page" sx={{ py: 4 }}>
       <Typography variant="h4">Места выдачи</Typography>
       <Typography color="text.secondary" sx={{ mt: 1, mb: 3 }}>Здесь можно получить или вернуть книгу.</Typography>
       <Stack spacing={2}>

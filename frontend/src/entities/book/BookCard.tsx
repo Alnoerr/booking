@@ -1,9 +1,7 @@
 import { Card, CardActionArea, CardContent, Chip, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
-import type { books } from './demoData'
+import type { Book } from './types'
 import { BookCover } from './BookCover'
-
-type Book = (typeof books)[number]
 
 export function BookCard({ book }: { book: Book }) {
   return (

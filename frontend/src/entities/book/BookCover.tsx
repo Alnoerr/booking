@@ -1,7 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import type { books } from './demoData'
-
-type Book = (typeof books)[number]
+import type { Book } from './types'
 
 export function BookCover({ book }: { book: Book }) {
   return (

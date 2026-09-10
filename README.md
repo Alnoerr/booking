@@ -11,13 +11,13 @@
 
 ## Запуск
 
-```powershell
+```
 Copy-Item .env.example .env
 ```
 
 Задать пароль в `.env`, затем выполнить:
 
-```powershell
+```
 docker compose up --build
 ```
 
@@ -27,7 +27,7 @@ docker compose up --build
 
 Остановка:
 
-```powershell
+```
 docker compose down
 ```
 
@@ -36,8 +36,6 @@ docker compose down
 - `Location` — место выдачи;
 - `Book` — книга, связанная с местом выдачи;
 - `Reservation` — бронирование книги со сроком возврата.
-
-Связи: `Location 1:N Book`, `Book 1:N Reservation`. Таблицы создаются при запуске backend.
 
 ## API
 

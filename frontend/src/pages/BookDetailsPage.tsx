@@ -1,8 +1,8 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Box, Button, Chip, Container, Paper, Typography } from '@mui/material'
 import { Link, useParams } from 'react-router-dom'
-import { BookCover } from '../components/BookCover'
-import { books, locations } from '../data/demoData'
+import { BookCover } from '../entities/book/BookCover'
+import { books, locations } from '../entities/book/demoData'
 
 export function BookDetailsPage() {
   const { bookId } = useParams()

@@ -1,6 +1,6 @@
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import { Card, CardContent, Container, Stack, Typography } from '@mui/material'
-import { locations } from '../data/demoData'
+import { locations } from '../entities/book/demoData'
 
 export function LocationsPage() {
   return (

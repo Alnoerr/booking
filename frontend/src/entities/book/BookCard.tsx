@@ -1,6 +1,6 @@
 import { Card, CardActionArea, CardContent, Chip, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
-import type { books } from '../data/demoData'
+import type { books } from './demoData'
 import { BookCover } from './BookCover'
 
 type Book = (typeof books)[number]

@@ -1,7 +1,7 @@
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { theme } from './theme'
-import { AppShell } from '../components/AppShell'
+import { AppShell } from '../shared/AppShell'
 import { BookDetailsPage } from '../pages/BookDetailsPage'
 import { CatalogPage } from '../pages/CatalogPage'
 import { LocationsPage } from '../pages/LocationsPage'

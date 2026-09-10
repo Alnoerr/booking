@@ -1,5 +1,5 @@
 import { Button, Card, CardContent, Chip, Container, Typography } from '@mui/material'
-import { books, locations } from '../data/demoData'
+import { books, locations } from '../entities/book/demoData'
 
 export function ReservationsPage() {
   const book = books[1]

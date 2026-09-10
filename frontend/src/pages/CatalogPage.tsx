@@ -1,7 +1,7 @@
 import SearchIcon from '@mui/icons-material/Search'
 import { Box, Container, InputAdornment, TextField, Typography } from '@mui/material'
-import { BookCard } from '../components/BookCard'
-import { books } from '../data/demoData'
+import { BookCard } from '../entities/book/BookCard'
+import { books } from '../entities/book/demoData'
 
 export function CatalogPage() {
   return (

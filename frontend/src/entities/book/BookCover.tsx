@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import type { books } from '../data/demoData'
+import type { books } from './demoData'
 
 type Book = (typeof books)[number]
 

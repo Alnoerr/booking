@@ -1,7 +1,33 @@
 from datetime import date, datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
+
+
+class UserRegister(BaseModel):
+    email: EmailStr
+    password: str = Field(min_length=8, max_length=100)
+
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class UserRead(BaseModel):
+    id: int
+    email: EmailStr
+    model_config = ConfigDict(from_attributes=True)
+
+
+class TokenPair(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+
+
+class RefreshRequest(BaseModel):
+    refresh_token: str
 
 
 class LocationCreate(BaseModel):
@@ -43,6 +69,7 @@ class BookUpdate(BaseModel):
 
 class BookRead(BookCreate):
     id: int
+    owner_id: int
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -57,6 +84,7 @@ class ReservationUpdate(BaseModel):
 class ReservationRead(BaseModel):
     id: int
     book_id: int
+    user_id: int
     status: str
     reserved_at: datetime
     due_date: date
@@ -68,4 +96,3 @@ class StatisticsRead(BaseModel):
     books: int
     reservations: int
     active_reservations: int
-

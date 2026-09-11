@@ -1,9 +1,49 @@
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from . import models, schemas
+
+
+def get_user(db: Session, user_id: int) -> models.User | None:
+    return db.get(models.User, user_id)
+
+
+def get_user_by_email(db: Session, email: str) -> models.User | None:
+    return db.scalar(select(models.User).where(models.User.email == email))
+
+
+def create_user(db: Session, email: str, password_hash: str) -> models.User:
+    user = models.User(email=email, password_hash=password_hash)
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
+
+
+def save_refresh_token(
+    db: Session, user_id: int, token_hash: str, expires_at: datetime
+) -> models.RefreshToken:
+    token = models.RefreshToken(
+        user_id=user_id,
+        token_hash=token_hash,
+        expires_at=expires_at,
+    )
+    db.add(token)
+    db.commit()
+    return token
+
+
+def get_refresh_token(db: Session, token_hash: str) -> models.RefreshToken | None:
+    return db.scalar(
+        select(models.RefreshToken).where(models.RefreshToken.token_hash == token_hash)
+    )
+
+
+def revoke_refresh_token(db: Session, token: models.RefreshToken) -> None:
+    token.revoked = True
+    db.commit()
 
 
 def get_locations(db: Session) -> list[models.Location]:

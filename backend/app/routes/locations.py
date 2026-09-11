@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
-from .. import dao, schemas
+from .. import dao, models, schemas
 from ..database import get_db
+from ..dependencies import get_current_user
 
 
 router = APIRouter(prefix="/locations", tags=["locations"])
@@ -22,13 +23,20 @@ def get_location(location_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("", response_model=schemas.LocationRead, status_code=status.HTTP_201_CREATED)
-def create_location(data: schemas.LocationCreate, db: Session = Depends(get_db)):
+def create_location(
+    data: schemas.LocationCreate,
+    db: Session = Depends(get_db),
+    user: models.User = Depends(get_current_user),
+):
     return dao.create_location(db, data)
 
 
 @router.patch("/{location_id}", response_model=schemas.LocationRead)
 def update_location(
-    location_id: int, data: schemas.LocationUpdate, db: Session = Depends(get_db)
+    location_id: int,
+    data: schemas.LocationUpdate,
+    db: Session = Depends(get_db),
+    user: models.User = Depends(get_current_user),
 ):
     location = dao.get_location(db, location_id)
     if location is None:
@@ -37,7 +45,11 @@ def update_location(
 
 
 @router.delete("/{location_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_location(location_id: int, db: Session = Depends(get_db)):
+def delete_location(
+    location_id: int,
+    db: Session = Depends(get_db),
+    user: models.User = Depends(get_current_user),
+):
     location = dao.get_location(db, location_id)
     if location is None:
         raise HTTPException(status_code=404, detail="Место выдачи не найдено")

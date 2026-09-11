@@ -3,8 +3,9 @@ from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
-from .. import auth, dao, schemas
+from .. import auth, dao, models, schemas
 from ..database import get_db
+from ..dependencies import get_current_user
 
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -51,3 +52,7 @@ def logout(data: schemas.RefreshRequest, db: Session = Depends(get_db)):
         dao.revoke_refresh_token(db, token)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
+
+@router.get("/me", response_model=schemas.UserRead)
+def me(user: models.User = Depends(get_current_user)):
+    return user

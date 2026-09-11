@@ -85,8 +85,8 @@ def get_book(db: Session, book_id: int) -> models.Book | None:
     return db.get(models.Book, book_id)
 
 
-def create_book(db: Session, data: schemas.BookCreate) -> models.Book:
-    book = models.Book(**data.model_dump())
+def create_book(db: Session, data: schemas.BookCreate, owner_id: int) -> models.Book:
+    book = models.Book(**data.model_dump(), owner_id=owner_id)
     db.add(book)
     db.commit()
     db.refresh(book)
@@ -106,17 +106,28 @@ def delete_book(db: Session, book: models.Book) -> None:
     db.commit()
 
 
-def get_reservations(db: Session) -> list[models.Reservation]:
-    return list(db.scalars(select(models.Reservation).order_by(models.Reservation.id)))
+def get_reservations(db: Session, user_id: int) -> list[models.Reservation]:
+    query = select(models.Reservation).where(models.Reservation.user_id == user_id)
+    return list(db.scalars(query.order_by(models.Reservation.id)))
 
 
-def get_reservation(db: Session, reservation_id: int) -> models.Reservation | None:
-    return db.get(models.Reservation, reservation_id)
+def get_reservation(
+    db: Session, reservation_id: int, user_id: int
+) -> models.Reservation | None:
+    return db.scalar(
+        select(models.Reservation).where(
+            models.Reservation.id == reservation_id,
+            models.Reservation.user_id == user_id,
+        )
+    )
 
 
-def create_reservation(db: Session, book: models.Book) -> models.Reservation:
+def create_reservation(
+    db: Session, book: models.Book, user_id: int
+) -> models.Reservation:
     reservation = models.Reservation(
         book_id=book.id,
+        user_id=user_id,
         due_date=date.today() + timedelta(days=21),
     )
     book.available = False

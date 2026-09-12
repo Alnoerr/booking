@@ -1,6 +1,7 @@
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import { AppBar, Box, Button, Container, Stack, Toolbar, Typography } from '@mui/material'
 import { Link, Outlet } from 'react-router-dom'
+import { useAuth } from '../app/AuthContext'
 
 const navigation = [
   { label: 'Каталог', path: '/catalog' },
@@ -10,6 +11,8 @@ const navigation = [
 ]
 
 export function AppShell() {
+  const { user, logout } = useAuth()
+
   return (
     <Box>
       <AppBar position="static">
@@ -24,6 +27,11 @@ export function AppShell() {
                 <Button key={item.path} component={Link} to={item.path} color="inherit">{item.label}</Button>
               ))}
             </Stack>
+            {user ? (
+              <Button color="inherit" onClick={logout}>Выйти</Button>
+            ) : (
+              <Button color="inherit" component={Link} to="/login">Войти</Button>
+            )}
           </Toolbar>
         </Container>
       </AppBar>

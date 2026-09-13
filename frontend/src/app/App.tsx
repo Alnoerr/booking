@@ -10,6 +10,7 @@ import { ReservationsPage } from '../pages/ReservationsPage'
 import { StatisticsPage } from '../pages/StatisticsPage'
 import { LoginPage } from '../pages/LoginPage'
 import { RegisterPage } from '../pages/RegisterPage'
+import { BookFormPage } from '../pages/BookFormPage'
 import { AuthProvider, useAuth } from './AuthContext'
 
 function PrivatePage({ children }: { children: ReactNode }) {
@@ -28,6 +29,8 @@ export function App() {
           <Route element={<AppShell />}>
             <Route path="/catalog" element={<CatalogPage />} />
             <Route path="/catalog/:bookId" element={<BookDetailsPage />} />
+            <Route path="/books/new" element={<PrivatePage><BookFormPage /></PrivatePage>} />
+            <Route path="/books/:bookId/edit" element={<PrivatePage><BookFormPage /></PrivatePage>} />
             <Route path="/reservations" element={<PrivatePage><ReservationsPage /></PrivatePage>} />
             <Route path="/locations" element={<LocationsPage />} />
             <Route path="/statistics" element={<StatisticsPage />} />

@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Alert, Box, Button, Chip, CircularProgress, Container, Paper, Snackbar, Typography } from '@mui/material'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { BookCover } from '../entities/book/BookCover'
 import type { Book, Location } from '../entities/book/apiTypes'
 import { BookingDialog } from '../features/book-booking/BookingDialog'
 import { api } from '../shared/api'
+import { useAuth } from '../app/AuthContext'
 
 export function BookDetailsPage() {
   const { bookId } = useParams()
+  const navigate = useNavigate()
+  const { user } = useAuth()
   const [book, setBook] = useState<Book | null>(null)
   const [location, setLocation] = useState<Location | null>(null)
   const [loading, setLoading] = useState(true)
@@ -33,6 +36,17 @@ export function BookDetailsPage() {
   if (loading) return <CircularProgress sx={{ m: 4 }} />
   if (error || !book) return <Alert severity="error" sx={{ m: 4 }}>{error || 'Книга не найдена'}</Alert>
 
+  async function deleteBook() {
+    if (!book) return
+    if (!window.confirm('Удалить книгу?')) return
+    try {
+      await api(`/books/${book.id}`, { method: 'DELETE' }, true)
+      navigate('/catalog')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ошибка удаления')
+    }
+  }
+
   return (
     <Container component="main" maxWidth="md" className="page" sx={{ py: 4 }}>
       <Button component={Link} to="/catalog" startIcon={<ArrowBackIcon />}>Назад</Button>
@@ -50,6 +64,12 @@ export function BookDetailsPage() {
             <Button variant="contained" disabled={!book.available || booked} onClick={() => setDialogOpen(true)} sx={{ mt: 3 }}>
               {booked ? 'Забронировано' : 'Забронировать'}
             </Button>
+            {user?.id === book.owner_id && (
+              <Box sx={{ mt: 2 }}>
+                <Button component={Link} to={`/books/${book.id}/edit`}>Изменить</Button>
+                <Button color="error" onClick={deleteBook}>Удалить</Button>
+              </Box>
+            )}
           </Box>
         </Box>
       </Paper>

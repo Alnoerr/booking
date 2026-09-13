@@ -1,18 +1,37 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { Box, Button, Chip, Container, Paper, Snackbar, Typography } from '@mui/material'
+import { Alert, Box, Button, Chip, CircularProgress, Container, Paper, Snackbar, Typography } from '@mui/material'
 import { Link, useParams } from 'react-router-dom'
 import { BookCover } from '../entities/book/BookCover'
-import { books, locations } from '../entities/book/demoData'
+import type { Book, Location } from '../entities/book/apiTypes'
 import { BookingDialog } from '../features/book-booking/BookingDialog'
+import { api } from '../shared/api'
 
 export function BookDetailsPage() {
   const { bookId } = useParams()
-  const book = books.find((item) => item.id === Number(bookId)) ?? books[0]
-  const location = locations.find((item) => item.id === book.locationId)
+  const [book, setBook] = useState<Book | null>(null)
+  const [location, setLocation] = useState<Location | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
   const [booked, setBooked] = useState(false)
   const [messageOpen, setMessageOpen] = useState(false)
+
+  useEffect(() => {
+    Promise.all([
+      api<Book>(`/books/${bookId}`),
+      api<Location[]>('/locations'),
+    ])
+      .then(([bookData, locations]) => {
+        setBook(bookData)
+        setLocation(locations.find((item) => item.id === bookData.location_id) ?? null)
+      })
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false))
+  }, [bookId])
+
+  if (loading) return <CircularProgress sx={{ m: 4 }} />
+  if (error || !book) return <Alert severity="error" sx={{ m: 4 }}>{error || 'Книга не найдена'}</Alert>
 
   return (
     <Container component="main" maxWidth="md" className="page" sx={{ py: 4 }}>

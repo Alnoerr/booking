@@ -61,7 +61,7 @@ export function BookDetailsPage() {
             <Typography sx={{ mt: 3 }}><b>Место выдачи:</b> {location?.name}</Typography>
             <Typography color="text.secondary">{location?.address}</Typography>
             <Typography sx={{ mt: 2 }}><b>Срок чтения:</b> 21 день</Typography>
-            <Button variant="contained" disabled={!book.available || booked} onClick={() => setDialogOpen(true)} sx={{ mt: 3 }}>
+            <Button variant="contained" disabled={!book.available || booked} onClick={() => user ? setDialogOpen(true) : navigate('/login')} sx={{ mt: 3 }}>
               {booked ? 'Забронировано' : 'Забронировать'}
             </Button>
             {user?.id === book.owner_id && (
@@ -75,6 +75,7 @@ export function BookDetailsPage() {
       </Paper>
       <BookingDialog
         open={dialogOpen}
+        bookId={book.id}
         bookTitle={book.title}
         onClose={() => setDialogOpen(false)}
         onBooked={() => {

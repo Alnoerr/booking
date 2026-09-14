@@ -1,43 +1,33 @@
 import { useState } from 'react'
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  Select,
-} from '@mui/material'
-import { locations } from '../../entities/book/demoData'
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material'
+import { api } from '../../shared/api'
 
 interface Props {
   open: boolean
+  bookId: number
   bookTitle: string
   onClose: () => void
   onBooked: () => void
 }
 
-export function BookingDialog({ open, bookTitle, onClose, onBooked }: Props) {
-  const [locationId, setLocationId] = useState('')
+export function BookingDialog({ open, bookId, bookTitle, onClose, onBooked }: Props) {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  function submit() {
-    if (!locationId) {
-      setError('Выберите место выдачи')
-      return
-    }
-
+  async function submit() {
     setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-      setLocationId('')
-      setError('')
+    setError('')
+    try {
+      await api('/reservations', {
+        method: 'POST',
+        body: JSON.stringify({ book_id: bookId }),
+      }, true)
       onBooked()
-    }, 500)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ошибка бронирования')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -45,22 +35,8 @@ export function BookingDialog({ open, bookTitle, onClose, onBooked }: Props) {
       <DialogTitle>Бронирование</DialogTitle>
       <DialogContent>
         <p>{bookTitle}</p>
-        <FormControl fullWidth error={Boolean(error)}>
-          <InputLabel>Место выдачи</InputLabel>
-          <Select
-            value={locationId}
-            label="Место выдачи"
-            onChange={(event) => {
-              setLocationId(event.target.value)
-              setError('')
-            }}
-          >
-            {locations.map((location) => (
-              <MenuItem key={location.id} value={location.id}>{location.name}</MenuItem>
-            ))}
-          </Select>
-          <FormHelperText>{error}</FormHelperText>
-        </FormControl>
+        {error && <Alert severity="error">{error}</Alert>}
+        <p>Срок возврата — 21 день.</p>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Отмена</Button>

@@ -78,7 +78,7 @@ class ReservationCreate(BaseModel):
 
 
 class ReservationUpdate(BaseModel):
-    status: Literal["active", "returned", "cancelled"]
+    status: Literal["returned", "cancelled"]
 
 
 class ReservationRead(BaseModel):
@@ -89,6 +89,7 @@ class ReservationRead(BaseModel):
     reserved_at: datetime
     due_date: date
     returned_at: date | None
+    book: BookRead
     model_config = ConfigDict(from_attributes=True)
 
 
